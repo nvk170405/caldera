@@ -1,7 +1,37 @@
+import { Search, Menu, LogOut, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Search, Menu } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Header = () => {
+  const { user, signOut, loading } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast({
+        title: "Error signing out",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Signed out successfully",
+        description: "You have been signed out.",
+      });
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-caldera-border bg-background/80 backdrop-blur-md">
       <div className="container flex h-16 items-center px-4">
@@ -29,9 +59,47 @@ const Header = () => {
           <Button variant="ghost" size="sm" className="hidden md:inline-flex">
             Browse Apps
           </Button>
-          <Button size="sm" className="bg-gradient-primary hover:opacity-90 transition-opacity">
-            Submit App
-          </Button>
+          
+          {loading ? (
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+          ) : user ? (
+            <div className="flex items-center gap-2">
+              <Button size="sm" className="bg-primary hover:bg-primary/90">
+                Submit App
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm">
+                    <User className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => navigate('/auth')}
+              >
+                Sign In
+              </Button>
+              <Button 
+                size="sm" 
+                className="bg-primary hover:bg-primary/90"
+                onClick={() => navigate('/auth')}
+              >
+                Submit App
+              </Button>
+            </div>
+          )}
+          
           <Button variant="ghost" size="sm" className="md:hidden">
             <Menu className="h-4 w-4" />
           </Button>
