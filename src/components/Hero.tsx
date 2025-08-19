@@ -64,7 +64,7 @@ const Hero = () => {
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="mb-6 font-inter text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl overflow-hidden"
+            className="mb-6 font-montserrat text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl overflow-hidden"
           >
             <motion.span
               initial={{ y: 100 }}
