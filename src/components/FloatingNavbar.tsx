@@ -64,7 +64,7 @@ const FloatingNavbar = () => {
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed top-4 left-1/2 z-50 w-full max-w-6xl px-4 -translate-x-1/2"
+      className="fixed top-4 left-1/2 z-50 w-full max-w-5xl px-4 -translate-x-1/2"
     >
       <motion.nav
         animate={{
@@ -72,7 +72,7 @@ const FloatingNavbar = () => {
           backgroundColor: scrolled ? "rgba(16, 16, 20, 0.9)" : "rgba(16, 16, 20, 0.8)",
         }}
         transition={{ duration: 0.3 }}
-        className="relative rounded-2xl border border-white/10 shadow-2xl mx-auto max-w-5xl"
+        className="relative rounded-2xl border border-white/10 shadow-2xl"
       >
         {/* Floating Glow Effect */}
         <motion.div
