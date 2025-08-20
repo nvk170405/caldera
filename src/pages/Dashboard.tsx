@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -12,7 +12,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import FloatingNavbar from '@/components/FloatingNavbar';
+import DashboardSidebar from '@/components/DashboardSidebar';
+import DashboardHeader from '@/components/DashboardHeader';
 import { 
   Plus, 
   Upload, 
@@ -33,10 +34,14 @@ const Dashboard = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [apps, setApps] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
   const [currentPlan] = useState('Free'); // This would come from user data
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  
+  const activeTab = searchParams.get('tab') || 'apps';
   
   const [formData, setFormData] = useState({
     name: '',
@@ -166,10 +171,11 @@ const Dashboard = () => {
       transition={{ duration: 0.5 }}
       className="min-h-screen bg-background"
     >
-      <FloatingNavbar />
+      <DashboardSidebar currentPlan={currentPlan} />
+      <DashboardHeader sidebarCollapsed={sidebarCollapsed} />
       
-      <main className="pt-32 pb-20">
-        <div className="container px-4">
+      <main className={`transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-64'} mt-16 p-6`}>
+        <div className="max-w-7xl mx-auto">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -314,11 +320,14 @@ const Dashboard = () => {
             </div>
           </motion.div>
 
-          <Tabs defaultValue="apps" className="space-y-8">
-            <TabsList className="grid w-full max-w-md grid-cols-3">
+            <Tabs value={activeTab} onValueChange={(value) => setSearchParams({ tab: value })} className="space-y-8">
+            <TabsList className="grid w-full max-w-2xl grid-cols-6">
               <TabsTrigger value="apps">My Apps</TabsTrigger>
+              <TabsTrigger value="submit">Submit</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
               <TabsTrigger value="settings">Settings</TabsTrigger>
+              <TabsTrigger value="profile">Profile</TabsTrigger>
+              <TabsTrigger value="support">Support</TabsTrigger>
             </TabsList>
 
             <TabsContent value="apps" className="space-y-6">
@@ -461,6 +470,120 @@ const Dashboard = () => {
               </motion.div>
             </TabsContent>
 
+            <TabsContent value="submit" className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <Card className="glass-effect border-caldera-border">
+                  <CardHeader>
+                    <CardTitle>Submit Your App</CardTitle>
+                    <CardDescription>Fill out the form below to submit your app for review.</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleSubmitApp} className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="name">App Name *</Label>
+                          <Input
+                            id="name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            placeholder="Enter app name"
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="category">Category *</Label>
+                          <Select value={formData.category} onValueChange={(value) => setFormData(prev => ({ ...prev, category: value }))}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select category" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {categories.map(category => (
+                                <SelectItem key={category} value={category.toLowerCase()}>
+                                  {category}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="description">Description *</Label>
+                        <Textarea
+                          id="description"
+                          name="description"
+                          value={formData.description}
+                          onChange={handleInputChange}
+                          placeholder="Describe your app..."
+                          className="min-h-[100px]"
+                          required
+                        />
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="website">Website URL *</Label>
+                          <Input
+                            id="website"
+                            name="website"
+                            type="url"
+                            value={formData.website}
+                            onChange={handleInputChange}
+                            placeholder="https://your-app.com"
+                            required
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="github">GitHub URL (optional)</Label>
+                          <Input
+                            id="github"
+                            name="github"
+                            type="url"
+                            value={formData.github}
+                            onChange={handleInputChange}
+                            placeholder="https://github.com/username/repo"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="image">App Screenshot URL *</Label>
+                        <Input
+                          id="image"
+                          name="image"
+                          type="url"
+                          value={formData.image}
+                          onChange={handleInputChange}
+                          placeholder="https://example.com/screenshot.png"
+                          required
+                        />
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <Label htmlFor="tags">Tags (comma-separated)</Label>
+                        <Input
+                          id="tags"
+                          name="tags"
+                          value={formData.tags}
+                          onChange={handleInputChange}
+                          placeholder="web app, productivity, react"
+                        />
+                      </div>
+                      
+                      <Button type="submit" disabled={isSubmitting} className="bg-gradient-primary">
+                        {isSubmitting ? "Submitting..." : "Submit App"}
+                      </Button>
+                    </form>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </TabsContent>
+
             <TabsContent value="settings" className="space-y-6">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -489,6 +612,87 @@ const Dashboard = () => {
                     <Button variant="outline" onClick={() => navigate('/pricing')}>
                       Upgrade Plan
                     </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </TabsContent>
+
+            <TabsContent value="profile" className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <Card className="glass-effect border-caldera-border">
+                  <CardHeader>
+                    <CardTitle>Profile Settings</CardTitle>
+                    <CardDescription>Manage your profile information</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div>
+                      <Label>Email</Label>
+                      <Input value={user?.email || ''} disabled className="mt-2" />
+                    </div>
+                    <div>
+                      <Label>Display Name</Label>
+                      <Input placeholder="Your display name" className="mt-2" />
+                    </div>
+                    <div>
+                      <Label>Bio</Label>
+                      <Textarea placeholder="Tell us about yourself..." className="mt-2" />
+                    </div>
+                    <Button variant="outline">
+                      Save Changes
+                    </Button>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </TabsContent>
+
+            <TabsContent value="support" className="space-y-6">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <Card className="glass-effect border-caldera-border">
+                  <CardHeader>
+                    <CardTitle>Support</CardTitle>
+                    <CardDescription>Get help with your account and apps</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="p-4 border border-caldera-border rounded-lg">
+                        <h3 className="font-semibold mb-2">Community Support</h3>
+                        <p className="text-sm text-caldera-text-secondary mb-4">
+                          Join our community forum for help and discussions
+                        </p>
+                        <Button variant="outline" size="sm">
+                          Visit Forum
+                        </Button>
+                      </div>
+                      <div className="p-4 border border-caldera-border rounded-lg">
+                        <h3 className="font-semibold mb-2">Documentation</h3>
+                        <p className="text-sm text-caldera-text-secondary mb-4">
+                          Learn how to get the most out of FinoraX
+                        </p>
+                        <Button variant="outline" size="sm">
+                          View Docs
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    {currentPlan !== 'Free' && (
+                      <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg">
+                        <h3 className="font-semibold mb-2 text-primary">Priority Support</h3>
+                        <p className="text-sm text-caldera-text-secondary mb-4">
+                          Get direct help from our support team
+                        </p>
+                        <Button className="bg-gradient-primary" size="sm">
+                          Contact Support
+                        </Button>
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               </motion.div>
