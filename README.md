@@ -28,7 +28,7 @@ A modern web platform where users can list and promote their apps. Built with **
 Clone the repository and install dependencies:  
 ```bash
 # Clone the repo
-git clone https://github.com/nvk170405/applaunch-orbit.git
+git clone https://github.com/nvk170405/caldera.git
 
 # Move into the project folder
 cd caldera
