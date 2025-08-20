@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
@@ -60,19 +61,16 @@ const FloatingNavbar = () => {
   ];
 
   return (
-    <motion.div
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="fixed top-4 left-1/2 z-50 w-full max-w-5xl px-4 -translate-x-1/2"
-    >
+    <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 px-4">
       <motion.nav
-        animate={{
-          backdropFilter: scrolled ? "blur(20px)" : "blur(10px)",
-          backgroundColor: scrolled ? "rgba(16, 16, 20, 0.9)" : "rgba(16, 16, 20, 0.8)",
-        }}
-        transition={{ duration: 0.3 }}
-        className="relative rounded-2xl border border-white/10 shadow-2xl"
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className={`relative w-full max-w-4xl rounded-2xl border border-white/10 shadow-2xl transition-all duration-300 ${
+          scrolled 
+            ? "bg-background/90 backdrop-blur-xl" 
+            : "bg-background/80 backdrop-blur-lg"
+        }`}
       >
         {/* Floating Glow Effect */}
         <motion.div
@@ -100,7 +98,7 @@ const FloatingNavbar = () => {
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
               className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center"
             >
-              <span className="text-sm font-bold text-primary-foreground">F</span>
+              <span className="text-sm font-bold text-primary-foreground font-montserrat">F</span>
             </motion.div>
             <span className="font-bold text-xl font-montserrat text-primary">FinoraX</span>
           </motion.div>
@@ -116,7 +114,7 @@ const FloatingNavbar = () => {
                 whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.1)" }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate(item.href)}
-                className="flex items-center px-4 py-2 rounded-lg text-sm font-medium text-foreground hover:text-primary transition-all duration-200"
+                className="flex items-center px-4 py-2 rounded-lg text-sm font-medium font-montserrat text-foreground hover:text-primary transition-all duration-200"
               >
                 <item.icon className="mr-2 h-4 w-4" />
                 {item.name}
@@ -134,7 +132,7 @@ const FloatingNavbar = () => {
               whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(255, 103, 0, 0.4)" }}
               whileTap={{ scale: 0.95 }}
               onClick={() => navigate(user ? "/dashboard" : "/auth")}
-              className="hidden sm:flex items-center px-6 py-2 bg-gradient-primary text-primary-foreground rounded-lg font-medium transition-all duration-300"
+              className="hidden sm:flex items-center px-6 py-2 bg-gradient-primary text-primary-foreground rounded-lg font-medium font-montserrat transition-all duration-300"
             >
               Get Started
             </motion.button>
@@ -151,15 +149,15 @@ const FloatingNavbar = () => {
                 </motion.button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-card/90 backdrop-blur-lg border-white/10">
-                <DropdownMenuItem>
+                <DropdownMenuItem className="font-montserrat">
                   <Sun className="h-4 w-4 mr-2" />
                   Light
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem className="font-montserrat">
                   <Moon className="h-4 w-4 mr-2" />
                   Dark
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem className="font-montserrat">
                   <Monitor className="h-4 w-4 mr-2" />
                   System
                 </DropdownMenuItem>
@@ -185,7 +183,7 @@ const FloatingNavbar = () => {
                   </motion.button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="bg-card/90 backdrop-blur-lg border-white/10">
-                  <DropdownMenuItem onClick={handleSignOut}>
+                  <DropdownMenuItem onClick={handleSignOut} className="font-montserrat">
                     <LogOut className="h-4 w-4 mr-2" />
                     Sign Out
                   </DropdownMenuItem>
@@ -199,7 +197,7 @@ const FloatingNavbar = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate('/auth')}
-                className="hidden sm:block px-4 py-2 text-sm font-medium text-foreground hover:text-primary transition-colors"
+                className="hidden sm:block px-4 py-2 text-sm font-medium font-montserrat text-foreground hover:text-primary transition-colors"
               >
                 Sign In
               </motion.button>
@@ -261,7 +259,7 @@ const FloatingNavbar = () => {
                       navigate(item.href);
                       setIsOpen(false);
                     }}
-                    className="flex items-center w-full px-3 py-2 rounded-lg text-left text-foreground hover:text-primary transition-all duration-200"
+                    className="flex items-center w-full px-3 py-2 rounded-lg text-left font-montserrat text-foreground hover:text-primary transition-all duration-200"
                   >
                     <item.icon className="mr-3 h-4 w-4" />
                     {item.name}
@@ -277,7 +275,7 @@ const FloatingNavbar = () => {
                     navigate(user ? "/dashboard" : "/auth");
                     setIsOpen(false);
                   }}
-                  className="w-full mt-4 px-4 py-3 bg-gradient-primary text-primary-foreground rounded-lg font-medium text-center"
+                  className="w-full mt-4 px-4 py-3 bg-gradient-primary text-primary-foreground rounded-lg font-medium font-montserrat text-center"
                 >
                   Get Started
                 </motion.button>
@@ -286,7 +284,7 @@ const FloatingNavbar = () => {
           )}
         </AnimatePresence>
       </motion.nav>
-    </motion.div>
+    </div>
   );
 };
 
