@@ -11,10 +11,7 @@ import {
   LogOut, 
   User, 
   Menu, 
-  X,
-  Sun,
-  Moon,
-  Monitor
+  X
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -137,32 +134,6 @@ const FloatingNavbar = () => {
               Get Started
             </motion.button>
 
-            {/* Theme Toggle */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <motion.button
-                  whileHover={{ scale: 1.1, rotate: 15 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-                >
-                  <Sun className="h-4 w-4 text-foreground" />
-                </motion.button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-card/90 backdrop-blur-lg border-white/10">
-                <DropdownMenuItem className="font-montserrat">
-                  <Sun className="h-4 w-4 mr-2" />
-                  Light
-                </DropdownMenuItem>
-                <DropdownMenuItem className="font-montserrat">
-                  <Moon className="h-4 w-4 mr-2" />
-                  Dark
-                </DropdownMenuItem>
-                <DropdownMenuItem className="font-montserrat">
-                  <Monitor className="h-4 w-4 mr-2" />
-                  System
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
 
             {/* User Menu */}
             {loading ? (
