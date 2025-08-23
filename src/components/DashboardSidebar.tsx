@@ -116,9 +116,9 @@ const DashboardSidebar = ({ currentPlan = 'Free' }: DashboardSidebarProps) => {
                   transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                   className="h-8 w-8 rounded-lg bg-gradient-primary flex items-center justify-center"
                 >
-                  <span className="text-sm font-bold text-primary-foreground font-montserrat">F</span>
+                  <span className="text-sm font-bold text-primary-foreground font-montserrat">C</span>
                 </motion.div>
-                <span className="font-bold text-lg font-montserrat text-primary">FinoraX</span>
+                <span className="font-bold text-lg font-montserrat text-primary">Caldera</span>
               </motion.div>
             )}
           </AnimatePresence>
