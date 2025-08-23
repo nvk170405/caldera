@@ -167,10 +167,10 @@ const DashboardHeader = ({ sidebarCollapsed = false }: DashboardHeaderProps) => 
                               <div className="h-2 w-2 bg-primary rounded-full flex-shrink-0 ml-2" />
                             )}
                           </div>
-                          <p className="text-xs text-caldera-text-secondary mt-1">
+                          <p className="text-xs text-caldera-text-secondary hover:text-black mt-1">
                             {notification.message}
                           </p>
-                          <p className="text-xs text-caldera-text-secondary mt-1">
+                          <p className="text-xs text-caldera-text-secondary hover:text-black mt-1">
                             {notification.time}
                           </p>
                         </div>
