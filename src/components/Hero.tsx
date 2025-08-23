@@ -32,7 +32,7 @@ const Hero = () => {
   }, [animateIn, staggerIn, textReveal, floatingAnimation]);
 
   return (
-    <section ref={heroRef} className="relative overflow-hidden bg-gradient-hero py-20 lg:py-32 min-h-screen flex items-center">
+    <section ref={heroRef} className="relative overflow-hidden bg-gradient-hero min-h-screen flex items-center">
       {/* Animated Background Layers */}
       <FluidGradient />
       <ThreeJSBackground />
